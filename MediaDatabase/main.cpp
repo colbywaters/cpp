@@ -1,8 +1,8 @@
 /*
- * Student List implementation for a vector of student
+ * Media database implementation
  *
  * Colby Waters
- * 11/6/2022
+ * 12/3/2022
  */
 #include <iostream>
 #include <cstring>
