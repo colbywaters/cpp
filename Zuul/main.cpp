@@ -8,6 +8,8 @@
 #include <cstring>
 #include <vector>
 
+#include "room.h"
+
 using namespace std;
 
 /**
@@ -29,13 +31,16 @@ using namespace std;
  */
 class Game 
 {
+private:
+    vector<Room*> rooms;
+
 public:
     /**
      *  Game constructor
      */
     Game()
     {
-
+        createRooms();
     }
 
     /**
@@ -112,6 +117,25 @@ public:
         cout << "" << endl;
         cout << "Type 'help' if you need help." << endl;
         cout << endl;
+    }
+
+    void createRooms()
+    {
+        rooms.push_back(new Room("Cafeteria", "You are in the cafeteria."));
+    	rooms.push_back(new Room("Staff", "You are in the staff room."));
+    	rooms.push_back(new Room("1-20", "You are in the 1-20 room."));
+    	rooms.push_back(new Room("F-1", "You are in the F-1 room."));
+    	rooms.push_back(new Room("F-2", "You are in the F-2 room."));
+    	rooms.push_back(new Room("F-3", "You are in the F-3 room."));
+    	rooms.push_back(new Room("F-4", "You are in the F-4 room."));
+    	rooms.push_back(new Room("E-5", "You are in the E-5 room."));
+    	rooms.push_back(new Room("E-4", "You are in the F-1 room."));
+    	rooms.push_back(new Room("E-3", "You are in the F-2 room."));
+    	rooms.push_back(new Room("Main Office", "You are in the Main Office."));
+    	rooms.push_back(new Room("Counseling", "You are in the Counseling Office."));
+    	rooms.push_back(new Room("E-1", "You are in the E-1 room."));
+    	rooms.push_back(new Room("E-2", "You are in the E-2 room."));
+    	rooms.push_back(new Room("M-1", "You are in the M-1 room."));
     }
 };
 
