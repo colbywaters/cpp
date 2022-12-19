@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "room.h"
+#include "item.h"
 
 using namespace std;
 
