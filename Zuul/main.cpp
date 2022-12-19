@@ -68,12 +68,27 @@ public:
     {
         printWelcome();
 
+        printRoomDescription(currentRoom);
+
         bool finished = false;
 
         while (!finished) {
             finished = processCommand() ? false : true;
         }
         cout << "Thank you for playing.  Good bye." << endl;
+    }
+
+    /**
+     *  Helper function to return Direction from string.
+     */
+    Direction getDirectionFromString(const char* str)
+    {
+        if (strcmp(str, "north") == 0) return Direction::north;
+        if (strcmp(str, "south") == 0) return Direction::south;
+        if (strcmp(str, "east") == 0) return Direction::east;
+        if (strcmp(str, "west") == 0) return Direction::west;
+
+        return Direction::unknown;
     }
 
     /**
@@ -95,6 +110,29 @@ public:
         {
             printHelp();
         }
+        else
+        {
+            if (strlen(command) > 0)
+            {
+                // handle commands with arguments here
+                char *token = strtok(command, " ");
+
+                if (strcmp(token, "go") == 0)
+                {
+                    char *dirStr = strtok(nullptr, "\n");
+                    Direction dir = getDirectionFromString(dirStr);
+
+                    if (dir != unknown)
+                    {
+                        goRoom(dir);
+                    }
+                }
+                else
+                {
+                    cout << "Unknown command!" << endl;
+                }
+            }
+        }
 
         return true;  // false means we don't quit
     }
@@ -112,7 +150,8 @@ public:
 
         cout << "    help - prints this help information." << endl;
         cout << "    quit - quits program." << endl;
-
+        cout << "    go <north, south, east, west> - moves you in specific direction." << endl;
+        cout << "        example: go south" << endl;
     }
 
     /**
@@ -260,6 +299,34 @@ public:
         mHall[4]->setExit(Direction::north, rooms[11]);
         mHall[6]->setExit(Direction::south, rooms[10]);
         mHall[3]->setExit(Direction::south, eHall[0]);
+    }
+
+    /**
+     * Moves from current room to next room associated with direction.
+     */
+    void goRoom(Direction direction)
+    {
+        cout << "Moved " << Room::getDirectionString(direction) << endl;
+
+        // Try to leave current room.
+        Room* nextRoom = currentRoom->getExit(direction);
+
+        if (nextRoom == nullptr) {
+            cout << "There is no door in that direction!" << endl;
+        } else {
+            currentRoom = nextRoom;
+        }
+        printRoomDescription(currentRoom);
+    }
+
+    /**
+     * Print out description for specified room
+     */
+    void printRoomDescription(Room* room)
+    {
+        char roomDesc[512];
+        room->getDescriptionExtendedString(roomDesc, 512);
+        cout << roomDesc << endl;
     }
 };
 

@@ -23,7 +23,8 @@ enum Direction
     north,
     south,
     east,
-    west
+    west,
+    unknown
 };
 
 /*
@@ -78,7 +79,7 @@ public:
         return exits[dir];
     }
 
-    const char* getDirectionString(Direction dir)
+    static const char* getDirectionString(Direction dir)
     {
         switch(dir)
         {
@@ -93,12 +94,25 @@ public:
     }
 
     /**
+     * Return a string describing the room and it's exits, for example
+     * "Exits: north west".
+     */
+    void getDescriptionExtendedString(char* exitsString, int exitsStringSize)
+    {
+        strcpy(exitsString, description);
+        strcat(exitsString, "\n");
+
+        getExitString(exitsString, exitsStringSize);
+    }
+
+    /**
      * Return a string describing the room's exits, for example
      * "Exits: north west".
+     * Need to ensure string is initialized before using this.
      */
     void getExitString(char* exitsString, int exitsStringSize)
     {
-        strcpy(exitsString, "Exits: ");
+        strcat(exitsString, "Exits: ");
 
         map<Direction, Room*>::iterator it;
 
@@ -107,7 +121,7 @@ public:
             Direction dir = it->first;
 
             strcat(exitsString, getDirectionString(dir));
-
+            strcat(exitsString, " ");
         }
     }
 };
