@@ -8,8 +8,8 @@
 #include <cstring>
 #include <vector>
 
-#include "room.h"
 #include "item.h"
+#include "room.h"
 
 using namespace std;
 
@@ -47,6 +47,11 @@ private:
     static const int totalRooms = 15;
 
     Room* currentRoom;
+
+    // Room indices that will determine which rooms will have the presents, cake, and where the party will be held!
+    int partyRoomIndex = 0;   // This will be picked randomly between 0 and totalRooms.
+    int presentRoomIndex = 0; // This will be picked randomly between 0 and totalRooms but not birthday room.
+    int cakeRoomIndex = 0;    // This will be picked randomly between 0 and totalRooms but not birthday room.
 
 public:
     /**
@@ -198,8 +203,8 @@ public:
     	rooms.push_back(new Room("F-3", "You are in the F-3 room."));
     	rooms.push_back(new Room("F-4", "You are in the F-4 room."));
     	rooms.push_back(new Room("E-5", "You are in the E-5 room."));
-    	rooms.push_back(new Room("E-4", "You are in the F-1 room."));
-    	rooms.push_back(new Room("E-3", "You are in the F-2 room."));
+    	rooms.push_back(new Room("E-4", "You are in the E-4 room."));
+    	rooms.push_back(new Room("E-3", "You are in the E-3 room."));
     	rooms.push_back(new Room("Main Office", "You are in the Main Office."));
     	rooms.push_back(new Room("Counseling", "You are in the Counseling Office."));
     	rooms.push_back(new Room("E-1", "You are in the E-1 room."));
@@ -300,6 +305,52 @@ public:
         mHall[4]->setExit(Direction::north, rooms[11]);
         mHall[6]->setExit(Direction::south, rooms[10]);
         mHall[3]->setExit(Direction::south, eHall[0]);
+
+        partyRoomIndex = rand() % totalRooms;
+        presentRoomIndex = rand() % totalRooms;
+        cakeRoomIndex = rand() % totalRooms;
+
+        // Party room can't be in cafeteria where you start out.
+        if (partyRoomIndex == 0) {
+            partyRoomIndex++;
+        }
+
+        // If present and birthday party room are same then move present to different room.
+        if (partyRoomIndex == presentRoomIndex) {
+            presentRoomIndex++;
+            // If present is in invalid room then choose different room with smaller index.
+            if (presentRoomIndex == totalRooms) {
+                presentRoomIndex -= 2;
+            }
+        }
+        
+        // If cake and birthday party room are same then move cake to different room.
+        if (partyRoomIndex == cakeRoomIndex) {
+            cakeRoomIndex++;
+            // If cake is in invalid room then choose different room with smaller index.
+            if (cakeRoomIndex == totalRooms) {
+                cakeRoomIndex -= 2;
+            }
+        }
+
+        /* Debugging code - Uncomment to see rooms
+        cout << "Party room index: " << partyRoomIndex << endl;
+        cout << "Present room index: " << presentRoomIndex << endl;
+        cout << "Cake room index: " << cakeRoomIndex << endl;
+
+        cout << "Party room is " << rooms[partyRoomIndex]->getDescription() << endl;
+        cout << "Present room is " << rooms[presentRoomIndex]->getDescription() << endl;
+        cout << "Cake room is " << rooms[cakeRoomIndex]->getDescription() << endl;
+        */
+
+        // Set items in chosen rooms that you need to find before you can attend party.
+        rooms[presentRoomIndex]->setItem(new Item("Present"));
+        rooms[cakeRoomIndex]->setItem(new Item("Cake"));
+        
+        // Set the party room.
+        rooms[partyRoomIndex]->setAsPartyRoom();
+
+
     }
 
     /**
@@ -336,6 +387,10 @@ public:
  */
 int main()
 {
+    time_t t;
+
+    srand((unsigned) time(&t)); // seed random number generator used to pick party room, etc.
+
     cout << "------------------------------------------------" << endl;
     cout << " Zuul Birthday Party - Colby Waters - Dec 2022"   << endl;
     cout << "------------------------------------------------" << endl << endl;

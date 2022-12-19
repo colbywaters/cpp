@@ -39,17 +39,23 @@ private:
     // Map associates direction with Room. (example: "north", Room F-1)
     map<Direction, Room*> exits;  // stores exits of this room.
 
+    vector<Item*> items;
+
+    bool partyRoom;
+
 public:
     Room()
     {
         strcpy(name, "No name");
         strcpy(description, "No description");
+        partyRoom = false;
     }
 
     Room(const char* new_name, const char* new_desc)
     {
         strncpy(name, new_name, MAX_ROOM_NAME_SIZE);
         strncpy(description, new_desc, MAX_ROOM_NAME_DESC_SIZE);
+        partyRoom = false;
     }
 
     /**
@@ -123,5 +129,33 @@ public:
             strcat(exitsString, getDirectionString(dir));
             strcat(exitsString, " ");
         }
+    }
+
+    /*
+     * Get items from the room.
+     */
+    Item* getItem(int index) {
+    	return items[index];
+    }
+    
+    /*
+     * Set a specific item in the room
+     */
+    void setItem(Item* item) {
+        items.push_back(item);
+    }
+
+    /*
+     * Make this be the party room!
+     */
+    void setAsPartyRoom() {
+    	partyRoom = true;
+    }
+    
+    /*
+     * Is this the party room?
+     */
+    bool isPartyRoom() {
+    	return partyRoom;
     }
 };
