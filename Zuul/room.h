@@ -52,6 +52,16 @@ public:
     }
 
     /**
+     * Get name of this room.
+     */
+    const char* getName() { return name; }
+
+    /**
+     * Get description of this room.
+     */
+    const char* getDescription() { return description; }
+
+    /**
      * Define an exit from this room.
      */
     void setExit(Direction dir, Room* neighbor) 
@@ -66,5 +76,38 @@ public:
     Room* getExit(Direction dir) 
     {   
         return exits[dir];
+    }
+
+    const char* getDirectionString(Direction dir)
+    {
+        switch(dir)
+        {
+            case north: return "north";
+            case south: return "south";
+            case east:  return "east";
+            case west:  return "west";
+            default:
+                break;
+        }
+        return nullptr;
+    }
+
+    /**
+     * Return a string describing the room's exits, for example
+     * "Exits: north west".
+     */
+    void getExitString(char* exitsString, int exitsStringSize)
+    {
+        strcpy(exitsString, "Exits: ");
+
+        map<Direction, Room*>::iterator it;
+
+        for (it = exits.begin(); it != exits.end(); it++)
+        {
+            Direction dir = it->first;
+
+            strcat(exitsString, getDirectionString(dir));
+
+        }
     }
 };

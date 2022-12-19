@@ -45,6 +45,8 @@ private:
     static const int fHallSegments = 3;
     static const int totalRooms = 15;
 
+    Room* currentRoom;
+
 public:
     /**
      *  Game constructor
@@ -163,6 +165,101 @@ public:
     	rooms.push_back(new Room("E-1", "You are in the E-1 room."));
     	rooms.push_back(new Room("E-2", "You are in the E-2 room."));
     	rooms.push_back(new Room("M-1", "You are in the M-1 room."));
+
+        currentRoom = rooms[0]; // Start off in cafeteria.
+        
+        // Setup cafeteria exits
+        rooms[0]->setExit(Direction::east, oHall[1]);
+        
+        // Setup One Hall room exits
+        rooms[1]->setExit(Direction::west, oHall[1]);
+        rooms[2]->setExit(Direction::west, oHall[2]);
+        
+        // Setup F Hall room exits
+        rooms[3]->setExit(Direction::north, fHall[0]);
+        rooms[4]->setExit(Direction::north, fHall[1]);
+        rooms[5]->setExit(Direction::north, fHall[2]);
+        rooms[6]->setExit(Direction::north, eHall[2]);
+        
+        // Setup E Hall room exits
+        rooms[7]->setExit(Direction::west, eHall[2]);
+        rooms[8]->setExit(Direction::west, eHall[1]);
+        rooms[9]->setExit(Direction::west, eHall[0]);
+        rooms[12]->setExit(Direction::east, eHall[0]);
+        rooms[13]->setExit(Direction::east, eHall[1]);
+        
+        // Setup Main Hall room exists
+        rooms[10]->setExit(Direction::north, mHall[6]);
+        rooms[11]->setExit(Direction::south, mHall[4]);
+        rooms[14]->setExit(Direction::south, mHall[1]);
+        
+        // Setup One hall
+        oHall[0]->setExit(Direction::east, mHall[0]);
+        oHall[1]->setExit(Direction::east, rooms[1]);
+        oHall[2]->setExit(Direction::east, rooms[2]);
+        oHall[3]->setExit(Direction::east, fHall[0]);
+        
+        oHall[1]->setExit(Direction::west, rooms[0]);
+        
+        oHall[0]->setExit(Direction::south, oHall[1]);
+        oHall[1]->setExit(Direction::south, oHall[2]);
+        oHall[2]->setExit(Direction::south, oHall[3]);
+        oHall[3]->setExit(Direction::south, oHall[4]);
+        
+        oHall[1]->setExit(Direction::north, oHall[0]);
+        oHall[2]->setExit(Direction::north, oHall[1]);
+        oHall[3]->setExit(Direction::north, oHall[2]);
+        oHall[4]->setExit(Direction::north, oHall[3]);
+        
+        // Setup F hall
+        fHall[0]->setExit(Direction::east, fHall[1]);
+        fHall[1]->setExit(Direction::east, fHall[2]);
+        fHall[2]->setExit(Direction::east, eHall[2]);
+        
+        fHall[0]->setExit(Direction::west, oHall[3]);
+        fHall[1]->setExit(Direction::west, fHall[0]);
+        fHall[2]->setExit(Direction::west, eHall[1]);
+        
+        fHall[0]->setExit(Direction::south, rooms[3]);
+        fHall[1]->setExit(Direction::south, rooms[4]);
+        fHall[2]->setExit(Direction::south, rooms[5]);
+        
+        // Setup E hall
+        eHall[0]->setExit(Direction::south, eHall[1]);
+        eHall[1]->setExit(Direction::south, eHall[2]);
+        eHall[2]->setExit(Direction::south, rooms[6]);
+        
+        eHall[0]->setExit(Direction::north, mHall[3]);
+        eHall[1]->setExit(Direction::north, eHall[0]);
+        eHall[2]->setExit(Direction::north, eHall[1]);
+        
+        eHall[0]->setExit(Direction::east, rooms[12]);
+        eHall[1]->setExit(Direction::east, rooms[13]);
+        eHall[0]->setExit(Direction::west, rooms[9]);
+        eHall[1]->setExit(Direction::west, rooms[8]);
+        eHall[2]->setExit(Direction::west, rooms[7]);
+        
+        // Setup M hall
+        mHall[0]->setExit(Direction::east, mHall[1]);
+        mHall[1]->setExit(Direction::east, mHall[2]);
+        mHall[2]->setExit(Direction::east, mHall[3]);
+        mHall[3]->setExit(Direction::east, mHall[4]);
+        mHall[4]->setExit(Direction::east, mHall[5]);
+        mHall[5]->setExit(Direction::east, mHall[6]);
+        
+        mHall[6]->setExit(Direction::west, mHall[5]);
+        mHall[5]->setExit(Direction::west, mHall[4]);
+        mHall[4]->setExit(Direction::west, mHall[3]);
+        mHall[3]->setExit(Direction::west, mHall[2]);
+        mHall[2]->setExit(Direction::west, mHall[1]);
+        mHall[1]->setExit(Direction::west, mHall[0]);        
+        mHall[0]->setExit(Direction::west, oHall[0]);
+        
+        mHall[1]->setExit(Direction::north, rooms[14]);
+        
+        mHall[4]->setExit(Direction::north, rooms[11]);
+        mHall[6]->setExit(Direction::south, rooms[10]);
+        mHall[3]->setExit(Direction::south, eHall[0]);
     }
 };
 
