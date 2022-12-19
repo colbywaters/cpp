@@ -16,15 +16,14 @@ using namespace std;
 #define MAX_ROOM_NAME_DESC_SIZE 512
 
 /*
- * Need this because we're forced to use cstring instead of std::string
- * Found this on https://stackoverflow.com/questions/4157687/using-char-as-a-key-in-stdmap
+ * Direction used for exits
  */
-struct cmp_str
+enum Direction
 {
-   bool operator()(char const *a, char const *b) const
-   {
-      return std::strcmp(a, b) < 0;
-   }
+    north,
+    south,
+    east,
+    west
 };
 
 /*
@@ -37,7 +36,7 @@ private:
     char description[MAX_ROOM_NAME_DESC_SIZE];  // description for room.
 
     // Map associates direction with Room. (example: "north", Room F-1)
-    map<char*, Room*, cmp_str> exits;  // stores exits of this room.
+    map<Direction, Room*> exits;  // stores exits of this room.
 
 public:
     Room()
@@ -55,10 +54,17 @@ public:
     /**
      * Define an exit from this room.
      */
-    void setExit(const char* direction, Room* neighbor) 
+    void setExit(Direction dir, Room* neighbor) 
     {
-        int len = strlen(direction);
-        char* dir = new char[len];
         exits[dir] = neighbor;
+    }
+
+    /**
+     * Return the room that is reached if we go from this room in direction
+     * "direction". If there is no room in that direction, return null.
+     */
+    Room* getExit(Direction dir) 
+    {   
+        return exits[dir];
     }
 };
