@@ -109,6 +109,18 @@ public:
         strcat(exitsString, "\n");
 
         getExitString(exitsString, exitsStringSize);
+
+        if (items.size() > 0) {
+            strcat(exitsString, "\nThere are the following items in this room:\n");
+
+    	    for(int i = 0; i < items.size(); i++) {
+                strcat(exitsString, items[i]->getDescription());
+                strcat(exitsString, " ");
+    	    }
+            strcat(exitsString, "\n");
+        } else {
+        	strcat(exitsString, "\nThere are no items in this room.\n");
+        }
     }
 
     /**
@@ -146,6 +158,31 @@ public:
     }
 
     /*
+     * Removes an item from room.
+     */
+    Item* removeItem(const char* item) {
+
+    	Item* returnItem = nullptr;
+        int foundItem = -1;
+    	
+    	for(int i = 0; i < items.size() && returnItem == nullptr; i++)
+        {
+    		if (strcmp(items[i]->getDescription(), item) == 0)
+            {
+    			returnItem = items[i];
+                foundItem = i;
+    		}
+    	}
+    	
+    	if (returnItem != nullptr && foundItem != -1)
+        {
+            items.erase(items.begin()+foundItem);
+    	}
+    	
+    	return returnItem;
+    }
+
+    /*
      * Make this be the party room!
      */
     void setAsPartyRoom() {
@@ -157,5 +194,37 @@ public:
      */
     bool isPartyRoom() {
     	return partyRoom;
+    }
+
+    /*
+     * Are we allowed to enter this room?
+     */
+    bool canEnterRoom(vector<Item*>& inventory) {
+    	
+    	if (partyRoom == false) {
+    		return true;
+    	}
+    	
+    	bool hasTicket = false;
+    	bool hasCake = false;
+    	bool hasPresent = false;
+    	
+    	for(int i = 0; i < inventory.size(); i++)
+        {
+    		if (strcmp(inventory[i]->getDescription(), "ticket") == 0) {
+    			hasTicket = true;
+    		}
+    		
+            if (strcmp(inventory[i]->getDescription(), "cake") == 0) {
+    			hasCake = true;
+    		}
+    		
+            if (strcmp(inventory[i]->getDescription(), "present") == 0) {
+    			hasPresent = true;
+    		}
+    	}
+    	
+        // This is the party room. Can only enter if you have a ticket, cake, and a present.
+    	return (hasTicket && hasCake && hasPresent);
     }
 };

@@ -53,6 +53,8 @@ private:
     int presentRoomIndex = 0; // This will be picked randomly between 0 and totalRooms but not birthday room.
     int cakeRoomIndex = 0;    // This will be picked randomly between 0 and totalRooms but not birthday room.
 
+    // Player inventory. You need a ticket to go to the party!
+    vector<Item*> inventory;
 public:
     /**
      *  Game constructor
@@ -80,6 +82,18 @@ public:
 
         while (!finished) {
             finished = processCommand() ? false : true;
+
+            if (currentRoom->isPartyRoom())
+            {
+                // Yay you made it to the party room!
+                cout << "Welcome to the party! Thank you so much for" << endl;
+                cout << "bringing the cake and a present! We're going" << endl;
+                cout << "to have so much fun!" << endl;
+
+                cout << "..." << endl;
+                cout << "Hours have past and is now time to go home." << endl;
+                finished = true;
+            }
         }
         cout << "Thank you for playing.  Good bye." << endl;
     }
@@ -106,8 +120,6 @@ public:
         cout << "cmd>: ";
         cin.getline(command,sizeof(command));
 
-        cout << "You typed: " << command << endl;
-
         if (strcmp(command, "quit") == 0)
         {
             return false;  // They want to quit so return false.
@@ -115,6 +127,10 @@ public:
         else if (strcmp(command, "help") == 0)
         {
             printHelp();
+        }
+        else if (strcmp(command, "inventory") == 0)
+        {
+            printInventory();
         }
         else
         {
@@ -132,6 +148,19 @@ public:
                     {
                         goRoom(dir);
                     }
+                }
+                else if (strcmp(token, "drop") == 0)
+                {
+                    char *itemName = strtok(nullptr, "\n");
+
+                    Item* item = getItemFromInventory(itemName);
+
+                    dropItem(item);
+                }
+                else if (strcmp(token, "get") == 0)
+                {
+                    char *itemName = strtok(nullptr, "\n");
+                    getItem(itemName);
                 }
                 else
                 {
@@ -177,6 +206,9 @@ public:
         cout << endl;
     }
 
+    /**
+     *  Creates rooms for game
+     */
     void createRooms()
     {
         for(int i = 0; i < oHallSegments; i++) {
@@ -333,7 +365,7 @@ public:
             }
         }
 
-        /* Debugging code - Uncomment to see rooms
+        /* Uncomment this for debug
         cout << "Party room index: " << partyRoomIndex << endl;
         cout << "Present room index: " << presentRoomIndex << endl;
         cout << "Cake room index: " << cakeRoomIndex << endl;
@@ -344,13 +376,13 @@ public:
         */
 
         // Set items in chosen rooms that you need to find before you can attend party.
-        rooms[presentRoomIndex]->setItem(new Item("Present"));
-        rooms[cakeRoomIndex]->setItem(new Item("Cake"));
+        rooms[presentRoomIndex]->setItem(new Item("present"));
+        rooms[cakeRoomIndex]->setItem(new Item("cake"));
         
         // Set the party room.
         rooms[partyRoomIndex]->setAsPartyRoom();
 
-
+        inventory.push_back(new Item("ticket"));
     }
 
     /**
@@ -366,7 +398,16 @@ public:
         if (nextRoom == nullptr) {
             cout << "There is no door in that direction!" << endl;
         } else {
-            currentRoom = nextRoom;
+            if (nextRoom->isPartyRoom() ) {
+                if (nextRoom->canEnterRoom(inventory)) {
+                    currentRoom = nextRoom;
+                } else {
+                    cout << "If you want to get into this party then" << endl;
+                    cout << "you'll need a ticket, cake, and a present" << endl;
+                }
+            } else {
+                currentRoom = nextRoom;
+            }
         }
         printRoomDescription(currentRoom);
     }
@@ -379,6 +420,85 @@ public:
         char roomDesc[512];
         room->getDescriptionExtendedString(roomDesc, 512);
         cout << roomDesc << endl;
+    }
+
+    /**
+     * Print out player inventory
+     */
+    void printInventory() {
+        // print out everything that is in our inventory.
+        char output[255];
+        strcpy(output, "");
+
+        for(int i = 0; i < inventory.size(); i++) {
+            strcat( output, inventory[i]->getDescription());
+            strcat( output, " ");
+        }
+        cout << "You are carrying: " << output << endl;		
+}
+
+    /** 
+     * Implements get item from the room and placing in inventory.
+     */
+    void getItem(const char* itemName) 
+    {
+        // Remove item from room.
+        Item* item = currentRoom->removeItem(itemName);
+        
+        if (item == nullptr) {
+            cout << "That item is not here!" << endl;
+        } else {
+            // Add item to our inventory.
+            inventory.push_back(item);
+            printInventory();
+        }
+    }
+    
+    /** 
+     * Implements dropping item from inventory and placing in room.
+     */
+    void dropItem(Item* item) 
+    {        
+        if (item == nullptr) {
+            cout << "That item is not here!" << endl;
+        } else {
+            int found = -1;
+            for(int i = 0; i < inventory.size(); i++)
+            {
+                if (inventory[i] == item)
+                {
+                    found = i;
+                }
+            }
+
+            if (found != -1)
+            {
+                // Remove item from inventory.
+                inventory.erase(inventory.begin()+found);
+
+            } else {
+                cout << "That item is not here!" << endl;
+            }
+
+            // Add item to current room.
+            currentRoom->setItem(item);
+        }
+    }
+    
+    /*
+     * Retrieve an item from our inventory from a given a name.
+     */
+    Item* getItemFromInventory(const char* name) {
+
+        Item* item = nullptr;
+
+        for(int i = 0; i < inventory.size(); i++) {
+            if (strcmp(inventory[i]->getDescription(), name) == 0) {
+                item = inventory[i];
+            }
+        }
+
+        return item;
     }
 };
 
