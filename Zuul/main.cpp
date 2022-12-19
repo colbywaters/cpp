@@ -33,7 +33,10 @@ public:
     /**
      *  Game constructor
      */
-    Game() {}
+    Game()
+    {
+
+    }
 
     /**
      *  Game destructor
@@ -48,10 +51,34 @@ public:
         printWelcome();
 
         bool finished = false;
-        while (! finished) {
-            finished = true;
+
+        while (!finished) {
+            finished = processCommand() ? false : true;
         }
         cout << "Thank you for playing.  Good bye." << endl;
+    }
+
+    /**
+     *  Parse command from user
+     */
+    bool processCommand()
+    {
+        char command[256];
+        cout << "cmd>: ";
+        cin.getline(command,sizeof(command));
+
+        cout << "You typed: " << command << endl;
+
+        if (strcmp(command, "quit") == 0)
+        {
+            return false;  // They want to quit so return false.
+        }
+        else if (strcmp(command, "help") == 0)
+        {
+            printHelp();
+        }
+
+        return true;  // false means we don't quit
     }
 
     /**
@@ -59,11 +86,15 @@ public:
      */
     void printHelp() 
     {
+        cout << endl;
         cout << "You are lost. You are alone. You wander" << endl;
         cout << "around at Sunset Highschool." << endl;
         cout << endl;
         cout << "Your command words are:" << endl;
-        // @todo Show commands here!
+
+        cout << "    help - prints this help information." << endl;
+        cout << "    quit - quits program." << endl;
+
     }
 
     /**
