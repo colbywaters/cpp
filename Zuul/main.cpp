@@ -34,6 +34,17 @@ class Game
 private:
     vector<Room*> rooms;
 
+    vector<Room*> oHall;  // One Hall
+    vector<Room*> mHall;  // Main Hall
+    vector<Room*> eHall;  // E Hall
+    vector<Room*> fHall;  // F Hall
+
+    static const int oHallSegments = 5;
+    static const int mHallSegments = 7;
+    static const int eHallSegments = 3;
+    static const int fHallSegments = 3;
+    static const int totalRooms = 15;
+
 public:
     /**
      *  Game constructor
@@ -121,6 +132,22 @@ public:
 
     void createRooms()
     {
+        for(int i = 0; i < oHallSegments; i++) {
+            oHall.push_back(new Room("One Hall", "You are in One Hall."));
+        }
+
+        for(int i = 0; i < mHallSegments; i++) {
+            mHall.push_back(new Room("Main Hall", "You are in Main Hall."));
+        }
+
+        for(int i = 0; i < eHallSegments; i++) {
+            eHall.push_back(new Room("E Hall", "You are in E Hall."));
+        }
+
+        for(int i = 0; i < fHallSegments; i++) {
+            fHall.push_back(new Room("F Hall", "You are in F Hall."));
+        }
+
         rooms.push_back(new Room("Cafeteria", "You are in the cafeteria."));
     	rooms.push_back(new Room("Staff", "You are in the staff room."));
     	rooms.push_back(new Room("1-20", "You are in the 1-20 room."));
