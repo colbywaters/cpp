@@ -33,7 +33,7 @@ Node::Node(Student* pStudent)
  */
 Node::~Node()
 {
-    delete mpStudent;
+   // Node doesn't own the memory for the next node or student information. So nothing to delete.
 }
 
 /*
