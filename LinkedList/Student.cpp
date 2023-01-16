@@ -23,6 +23,14 @@ Student::Student()
 }
 
 /*
+ * Destructor for Student
+ */
+Student::~Student()
+{
+   // Nothing to delete for student.
+}
+
+/*
  * Method to set student id.
  */
 void Student::setId(int id)
