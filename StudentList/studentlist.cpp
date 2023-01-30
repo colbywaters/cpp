@@ -5,21 +5,14 @@
  * 11/6/2022
  */
 #include <iostream>
+#include <iomanip>
 #include <cstring>
-#include <vector>
+
+#include "node.h"
+#include "student.h"
 
 using namespace std;
 
-/*
- * Student - information for each student
- */
-struct Student
-{
-     char  fname[255];  // first name
-     char  lname[255];  // last name
-     int   id;          // id
-     float gpa;         // gpa
-};
 
 /*
  * Student - print information for each student
@@ -33,9 +26,42 @@ void printStudent(Student* s)
 }
 
 /*
+ * addStudentToList - add student node to list in order of id.
+ */
+Node* addStudentToList(Node* students, Node* newnode)
+{
+    // terminate recursion if we reached end of list.
+    if (students == nullptr)
+    {
+        cout << "Added student to end of list." << endl;
+        newnode->setNext(nullptr);
+        return newnode;
+    }
+
+    // terminate recursion if we found correct spot in list to add newnode.
+    if (newnode->getStudent()->id < students->getStudent()->id)
+    {
+        cout << "Added student with id " << newnode->getStudent()->id << " before id " << students->getStudent()->id << endl;
+        newnode->setNext(students);
+        return newnode;
+    }
+
+    Node* nextnode = addStudentToList(students->getNext(), newnode);
+
+    if (newnode == nextnode)
+    {
+        cout << "Fixing up pointer to previous node!" << endl;
+        students->setNext(newnode);
+    }
+
+    return students;
+}
+
+
+/*
  * Add Student - add student to student list
  */
-void addStudent(vector<Student*>& students)
+Node* addStudent(Node* students)
 {
     Student* s = new Student();
     cout << "-------------------------------" << endl;
@@ -50,36 +76,52 @@ void addStudent(vector<Student*>& students)
     cout << "GPA: ";
     cin >> s->gpa;
 
-    students.push_back(s);
+    Node* newnode = new Node(s);
+
+    return addStudentToList(students, newnode);
 }
 
 /*
  * Print Students - print students in student list
  */
-void printStudents(vector<Student*>& students)
+void printStudents(Node* students)
 {
-    cout << "-------------------------------" << endl;
-    cout << "Student List" << endl;
-    cout << "-------------------------------" << endl;
-
-    if (students.size() > 0)
+    if (students != nullptr)
     {
-        for(int i = 0; i < students.size(); i++)
-        {
-            printStudent(students[i]);
-            cout << endl;
-        }
-    }
-    else
-    {
-        cout << "No students!" << endl;
+        printStudent(students->getStudent());
+        cout << endl;
+        printStudents(students->getNext());
     }
 }
 
 /*
- * Delete Student - delete student in student list
+ * Delete Student Node - delete student in student list using recursion
  */
-void deleteStudent(vector<Student*>& students)
+Node* deleteStudent(Node* students, uint32_t id)
+{
+    if (students != nullptr)
+    {
+        if (students->getStudent()->id == id)
+        {
+            // Found match!
+            Node* next = students->getNext();
+            delete students;
+            cout << "Successfully deleted node." << endl;
+            return next;
+        }
+
+        Node* next = deleteStudent(students->getNext(), id);
+
+        students->setNext(next);
+    }
+
+    return students;
+}
+
+/*
+ * Delete Student Node - delete student in student list
+ */
+Node* deleteStudentNode(Node* students)
 {     
     uint32_t id = 0;
 
@@ -89,30 +131,7 @@ void deleteStudent(vector<Student*>& students)
     cout << "Id: ";
     cin >> id;
 
-    vector<Student*>::iterator i;
-
-    for(i = students.begin(); i != students.end(); ++i)
-    {
-        Student* s = *i;
-
-        if (s->id == id)
-        {
-            break; // break out of loop so the iterator points to entry we found.
-        }
-    }
-
-    if (i != students.end())
-    {
-        Student* s = *i;
-        cout << "Found student ... removing." << endl;
-        cout << "   " << s->fname << " " << s->lname << endl;
-        students.erase(i);  // Remove student from list!
-        delete s;           // Free the actual memory for student!
-    }
-    else
-    {
-        cout << "Could not find student with id: " << id << endl;
-    }
+    return deleteStudent(students, id);
 }
 
 /*
@@ -120,14 +139,18 @@ void deleteStudent(vector<Student*>& students)
  */
 int main()
 {
+    // Set precion for cout to 2 decimal places
+    std::cout << std::fixed;
+    std::cout << std::setprecision(2);
+
     // Parser for commands
     //   ADD -    Creates a new entry for a student.  After you type in add, the program
     //            should prompt for first name, last name, student id, and GPA.  That student
-    //            should then be added to the vector of students (well, student pointers!).
+    //            should then be added to the list of students (well, student pointers!).
     //   PRINT -  Your program should print out all the students currently stored.
     //            Example: John Doe, 101500, 3.70
     //   DELETE - Prompt the user for the student id number to delete, and remove that struct
-    //            from the vector. Be sure to delete the data.
+    //            from the list. Be sure to delete the data.
 
     bool hasQuit = false;
 
@@ -141,7 +164,7 @@ int main()
     cout << "   QUIT - Exits Student List program." << endl;
     cout << "------------------------------------------------" << endl;
     
-    vector<Student*> students;
+    Node* students = nullptr;
 
     while(hasQuit == false)
     {
@@ -151,18 +174,24 @@ int main()
 
         if (strcmp(command, "ADD") == 0)
         {
-            // Add student
-            addStudent(students);
+            // Add student.
+            // @note We assign to students as it can return a new head.
+            students = addStudent(students);
         }
         else if (strcmp(command, "PRINT") == 0)
         {
+            cout << "-------------------------------" << endl;
+            cout << "Student List" << endl;
+            cout << "-------------------------------" << endl;
+
             // Print student
             printStudents(students);
         }
         else if (strcmp(command, "DELETE") == 0)
         {
             // Delete student
-            deleteStudent(students);
+            // @note We assign to students as it can return a new head.
+            students = deleteStudentNode(students);
         }
         else if (strcmp(command, "QUIT") == 0)
         {
