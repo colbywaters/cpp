@@ -15,17 +15,6 @@ using namespace std;
 
 
 /*
- * Student - print information for each student
- */
-void printStudent(Student* s)
-{
-    cout << "First Name: " << s->fname << endl;
-    cout << "Last Name: " << s->lname << endl;
-    cout << "Id: " << s->id << endl;
-    cout << "GPA: " << s->gpa << endl;
-}
-
-/*
  * addStudentToList - add student node to list in order of id.
  */
 Node* addStudentToList(Node* students, Node* newnode)
@@ -82,6 +71,17 @@ Node* addStudent(Node* students)
 }
 
 /*
+ * Student - print information for each student
+ */
+void printStudent(Student* s)
+{
+    cout << "First Name: " << s->fname << endl;
+    cout << "Last Name: " << s->lname << endl;
+    cout << "Id: " << s->id << endl;
+    cout << "GPA: " << s->gpa << endl;
+}
+
+/*
  * Print Students - print students in student list
  */
 void printStudents(Node* students)
@@ -92,6 +92,29 @@ void printStudents(Node* students)
         cout << endl;
         printStudents(students->getNext());
     }
+}
+
+/*
+ * Print Students - print students in student list
+ */
+float average(Node* students, float gpaAverage)
+{
+    if (students != nullptr)
+    {
+        gpaAverage += students->getStudent()->gpa;
+        return average(students->getNext(), gpaAverage); 
+    }
+    return gpaAverage;
+}
+
+uint32_t count(Node* students, uint32_t c)
+{
+    if (students != nullptr)
+    {
+        c++;
+        return count(students->getNext(), c);
+    }
+    return c; 
 }
 
 /*
@@ -149,6 +172,7 @@ int main()
     //            should then be added to the list of students (well, student pointers!).
     //   PRINT -  Your program should print out all the students currently stored.
     //            Example: John Doe, 101500, 3.70
+    //   AVERAGE - Averages GPA for all students.
     //   DELETE - Prompt the user for the student id number to delete, and remove that struct
     //            from the list. Be sure to delete the data.
 
@@ -161,6 +185,7 @@ int main()
     cout << "   ADD - Creates new entry for a student." << endl;
     cout << "   PRINT - Prints out all students in list." << endl;
     cout << "   DELETE - Deletes student with ID from list." << endl;
+    cout << "   AVERAGE - Averages students GPA from list." << endl;
     cout << "   QUIT - Exits Student List program." << endl;
     cout << "------------------------------------------------" << endl;
     
@@ -186,6 +211,24 @@ int main()
 
             // Print student
             printStudents(students);
+        }
+        else if (strcmp(command, "AVERAGE") == 0)
+        {
+            uint32_t c = 0;
+            float a = 0.0f;
+
+            a = average(students, a);
+            c = count(students, c);
+
+            // Print out debug information for average.
+            //cout << "Sum is " << a << endl;
+            //cout << "Count is " << c << endl;
+
+            a = a / (float)c;
+
+            cout << "-------------------------------" << endl;
+            cout << "Average is " << a << endl;
+            cout << "-------------------------------" << endl;
         }
         else if (strcmp(command, "DELETE") == 0)
         {
