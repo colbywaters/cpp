@@ -7,6 +7,10 @@
  * Colby Waters
  * 1/15/2023
  */
+#ifndef Node_H
+#define Node_H
+
+#include "Student.h"
 
 /*
  * Node class that contains student information. Node is used as part of a LinkedList.
@@ -36,3 +40,5 @@ private:
     Student* mpStudent;  // Student info for this node.
     Node* mpNext;        // link to next Node
 };
+
+#endif // Node_H
