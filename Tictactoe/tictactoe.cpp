@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <cstring>
 
 using namespace std;
 
@@ -48,18 +49,27 @@ bool isBlank(char c)
 }
 
 /*
+ * continuePlaying - Ask the user if they want to continue playing.
+ */
+bool continuePlaying()
+{
+    bool result = true;
+
+    char answer[255];
+    cout << "Would you like to play again (y/n):" << endl;
+    cin >> answer;
+
+    if (strcmp(answer, "y") != 0) {
+      result = false;
+    }  
+  return result;
+}
+
+/*
  * main - This is main function for tic-tac-toe game!
  */
 int main()
 {
-    char Aboard[ROW][COL] = {{'*','*','*'}, {'*','*','*'},{'*','*','*'}};
-    bool win = false;
-    string Player1;
-    string Player2;
-    int row = 3;
-    int col = 3;
-    char PMove = 'X';
-
     cout << "----------------------------------------------------------" << endl;
     cout << "           Tic-Tac-Toe" << endl;
     cout << "----------------------------------------------------------" << endl;
@@ -68,78 +78,98 @@ int main()
     cout << "Player 1 is always \'X\' and Player 2 is always \'O\'" << endl;
     cout << "----------------------------------------------------------" << endl << endl;
 
-    displayBoard(Aboard);
+    // Do we continue playing? User will be asked this question. For right now we do!
+    bool doContinue = true;
 
-    while (win == false) {
-        // Display question to player.
-        if (PMove == 'X') {
-          cout << "Player 1 - Make your move (row column):" << endl;
-        } else {
-          cout << "Player 2 - Make your move (row column):" << endl;
-        }
-      
-        // Read players coordinates
-        cin >> row >> col;
+    while(doContinue) {
 
-        // Check if position is already taken on the board.
-        if (Aboard[row][col] == '*') {
-            Aboard[row][col] = PMove;
+        char Aboard[ROW][COL] = {{'*','*','*'}, {'*','*','*'},{'*','*','*'}};
+        string Player1;
+        string Player2;
+        int row = 3;
+        int col = 3;
 
-            cout << endl;
-            displayBoard(Aboard);
+        bool win = false;
+        char PMove = 'X';
 
-            // Check for 3 in row across
-            for (int i = 0; i < 3; i++) {
-                // Check if first position in column is blank. If it is then
-                // it can't be 3 in a row.
-                if (isBlank(Aboard[i][0]) == false) {
-                    if (Aboard[i][0] == Aboard[i][1] && Aboard[i][1] == Aboard[i][2]){
-                        win = true;
-                        if (PMove == 'X') {
-                            cout << "\'X\' wins with three in a row across!" << endl;
-                        } else {
-                            cout << "\'O\' wins with three in a row across!" << endl;
+        displayBoard(Aboard);
+
+        while (win == false) {
+            // Display question to player.
+            if (PMove == 'X') {
+              cout << "Player 1 - Make your move (row column):" << endl;
+            } else {
+              cout << "Player 2 - Make your move (row column):" << endl;
+            }
+          
+            // Read players coordinates
+            cin >> row >> col;
+
+            // Check if position is already taken on the board.
+            if (Aboard[row][col] == '*') {
+                Aboard[row][col] = PMove;
+
+                cout << endl;
+                displayBoard(Aboard);
+
+                // Check for 3 in row across
+                for (int i = 0; i < 3; i++) {
+                    // Check if first position in column is blank. If it is then
+                    // it can't be 3 in a row.
+                    if (isBlank(Aboard[i][0]) == false) {
+                        if (Aboard[i][0] == Aboard[i][1] && Aboard[i][1] == Aboard[i][2]){
+                            win = true;
+                            if (PMove == 'X') {
+                                cout << "\'X\' wins with three in a row across!" << endl;
+                            } else {
+                                cout << "\'O\' wins with three in a row across!" << endl;
+                            }
                         }
                     }
                 }
-            }
 
-            // Checks for 3 in a row vertically
-            for (int i = 0; i < 3; i++) {
-                if (isBlank(Aboard[0][i]) == false) {
-                    if (Aboard[0][i] == Aboard[1][i] && Aboard[1][i] == Aboard[2][i]){
-                        win = true;
-                        if (PMove == 'X') {
-                            cout << "\'X\' wins with three in a row vertically!" << endl;
-                        } else {
-                            cout << "\'O\' wins with three in a row vertically!" << endl;
+                // Checks for 3 in a row vertically
+                for (int i = 0; i < 3; i++) {
+                    if (isBlank(Aboard[0][i]) == false) {
+                        if (Aboard[0][i] == Aboard[1][i] && Aboard[1][i] == Aboard[2][i]){
+                            win = true;
+                            if (PMove == 'X') {
+                                cout << "\'X\' wins with three in a row vertically!" << endl;
+                            } else {
+                                cout << "\'O\' wins with three in a row vertically!" << endl;
+                            }
                         }
                     }
                 }
-            }
 
-            // Check for 3 in a row across the diagonals
-            if (isBlank(Aboard[1][1]) == false) {
-                if ((Aboard[0][0] == Aboard[1][1] && Aboard[1][1] == Aboard[2][2]) ||
-                    (Aboard[0][2] == Aboard[1][1] && Aboard[1][1] == Aboard[2][0])) {
-                    win = true;
-                    if (PMove == 'X') {
-                        cout << "\'X\' wins with three in a row diagonally!" << endl;
-                    } else {
-                        cout << "\'O\' wins with three in a row diagonally!" << endl;
+                // Check for 3 in a row across the diagonals
+                if (isBlank(Aboard[1][1]) == false) {
+                    if ((Aboard[0][0] == Aboard[1][1] && Aboard[1][1] == Aboard[2][2]) ||
+                        (Aboard[0][2] == Aboard[1][1] && Aboard[1][1] == Aboard[2][0])) {
+                        win = true;
+                        if (PMove == 'X') {
+                            cout << "\'X\' wins with three in a row diagonally!" << endl;
+                        } else {
+                            cout << "\'O\' wins with three in a row diagonally!" << endl;
+                        }
                     }
                 }
-            }
 
-          // Switch player turn.
-          if (PMove == 'X') {
-              PMove = 'O';
-          } else {
-              PMove = 'X';
-          }      
-        } else {
-            cout << "Invalid move! Position already taken. Enter another." << endl;
+              // Switch player turn.
+              if (PMove == 'X') {
+                  PMove = 'O';
+              } else {
+                  PMove = 'X';
+              }      
+            } else {
+                cout << "Invalid move! Position already taken. Enter another." << endl;
+            }
         }
+
+        // Ask player if they want to continue playing.
+        doContinue = continuePlaying();
     }
+
+    cout << "Thank you for playing!" << endl;
 }
 
