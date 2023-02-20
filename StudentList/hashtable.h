@@ -21,7 +21,7 @@ public:
     ~HashTable();
 
     // Add a new student to the hash table
-    void add(int id, float gpa, const char* fname, const char* lname);
+    void add(Student* student);
 
     // Delete a student from the hash table
     void remove(int id);

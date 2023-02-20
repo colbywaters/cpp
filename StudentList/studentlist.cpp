@@ -14,45 +14,10 @@
 
 using namespace std;
 
-
-
-/*
- * addStudentToList - add student node to list in order of id.
- */
-Node* addStudentToList(Node* students, Node* newnode)
-{
-    // terminate recursion if we reached end of list.
-    if (students == nullptr)
-    {
-        cout << "Added student to end of list." << endl;
-        newnode->setNext(nullptr);
-        return newnode;
-    }
-
-    // terminate recursion if we found correct spot in list to add newnode.
-    if (newnode->getStudent()->id < students->getStudent()->id)
-    {
-        cout << "Added student with id " << newnode->getStudent()->id << " before id " << students->getStudent()->id << endl;
-        newnode->setNext(students);
-        return newnode;
-    }
-
-    Node* nextnode = addStudentToList(students->getNext(), newnode);
-
-    if (newnode == nextnode)
-    {
-        cout << "Fixing up pointer to previous node!" << endl;
-        students->setNext(newnode);
-    }
-
-    return students;
-}
-
-
 /*
  * Add Student - add student to student list
  */
-Node* addStudent(Node* students)
+Student* addStudent()
 {
     int id = 0;
     float gpa = 0.0f;
@@ -75,9 +40,7 @@ Node* addStudent(Node* students)
     //       a student if id and gpa are legit.
     Student* s = new Student(id, gpa, fname, lname);
 
-    Node* newnode = new Node(s);
-
-    return addStudentToList(students, newnode);
+    return s;
 }
 
 /*
@@ -128,33 +91,9 @@ uint32_t count(Node* students, uint32_t c)
 }
 
 /*
- * Delete Student Node - delete student in student list using recursion
+ * Get Student Id
  */
-Node* deleteStudent(Node* students, uint32_t id)
-{
-    if (students != nullptr)
-    {
-        if (students->getStudent()->id == id)
-        {
-            // Found match!
-            Node* next = students->getNext();
-            delete students;
-            cout << "Successfully deleted node." << endl;
-            return next;
-        }
-
-        Node* next = deleteStudent(students->getNext(), id);
-
-        students->setNext(next);
-    }
-
-    return students;
-}
-
-/*
- * Delete Student Node - delete student in student list
- */
-Node* deleteStudentNode(Node* students)
+uint32_t getStudentId()
 {     
     uint32_t id = 0;
 
@@ -164,7 +103,7 @@ Node* deleteStudentNode(Node* students)
     cout << "Id: ";
     cin >> id;
 
-    return deleteStudent(students, id);
+    return id;
 }
 
 /*
@@ -202,8 +141,6 @@ int main()
     cout << "   QUIT - Exits Student List program." << endl;
     cout << "------------------------------------------------" << endl;
     
-    Node* students = nullptr;
-
     while(hasQuit == false)
     {
         char command[255];
@@ -213,8 +150,8 @@ int main()
         if (strcmp(command, "ADD") == 0)
         {
             // Add student.
-            // @note We assign to students as it can return a new head.
-            students = addStudent(students);
+            Student* s = addStudent();
+            hashTable.add(s);
         }
         else if (strcmp(command, "PRINT") == 0)
         {
@@ -223,10 +160,11 @@ int main()
             cout << "-------------------------------" << endl;
 
             // Print student
-            printStudents(students);
+            hashTable.print();
         }
         else if (strcmp(command, "AVERAGE") == 0)
         {
+            /*
             uint32_t c = 0;
             float a = 0.0f;
 
@@ -242,12 +180,13 @@ int main()
             cout << "-------------------------------" << endl;
             cout << "Average is " << a << endl;
             cout << "-------------------------------" << endl;
+            */
         }
         else if (strcmp(command, "DELETE") == 0)
         {
             // Delete student
-            // @note We assign to students as it can return a new head.
-            students = deleteStudentNode(students);
+            uint32_t id = getStudentId();
+            hashTable.remove(id);
         }
         else if (strcmp(command, "QUIT") == 0)
         {

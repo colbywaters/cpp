@@ -43,9 +43,8 @@ HashTable::~HashTable() {
 /*
  * Add a new student to the hash table
  */
-void HashTable::add(int id, float gpa, const char* fname, const char* lname) {
-    int index = hash(id);
-    Student* student = createStudent(id, gpa, fname, lname);
+void HashTable::add(Student* student) {
+    int index = hash(student->id);
     Node* node = new Node(student);
     if (table[index] == nullptr) {
         table[index] = node;
@@ -98,12 +97,4 @@ void HashTable::print() {
         }
         cout << endl;
     }
-}
-
-/*
- * Helper function to create a new student node
- */
-Student* HashTable::createStudent(int id,  float gpa, const char* fname, const char* lname) {
-    Student* student = new Student(id, gpa, fname, lname);
-    return student;
 }
