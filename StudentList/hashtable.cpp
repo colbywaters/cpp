@@ -49,11 +49,18 @@ void HashTable::add(Student* student) {
     if (table[index] == nullptr) {
         table[index] = node;
     } else {
+        int numCollisions = 1;        
         Node* current = table[index];
         while (current->getNext() != nullptr) {
             current = current->getNext();
+            numCollisions++;
         }
         current->setNext(node);
+
+        if (numCollisions > 3)
+        {
+            resize();
+        }
     }
 }
 
@@ -81,6 +88,40 @@ void HashTable::remove(int id) {
     }
     delete current;
     cout << "Student with ID " << id << " removed." << endl;
+}
+
+/*
+ * Resize - Rehash entire table into a newer larger table.
+ */
+void HashTable::resize()
+{
+    int newSize = this->size * 2;
+    Node** newTable = new Node*[newSize]();
+    int oldSize = size;
+    size = newSize;
+    
+    // rehash existing students into new table
+    for (int i = 0; i < oldSize; i++) {
+        Node* current = table[i];
+        while (current != nullptr) {
+            int index = hash(current->getStudent()->id);
+            Node* newNode = new Node(current->getStudent());
+            newTable[index] = newNode;
+            current = current->getNext();
+        }
+    }
+    
+    // delete old table
+    for (int i = 0; i < oldSize; i++) {
+        Node* current = table[i];
+        while (current != nullptr) {
+            Node* temp = current;
+            current = current->getNext();
+            delete temp;
+        }
+    }
+    delete[] table;
+    table = newTable;
 }
 
 /*

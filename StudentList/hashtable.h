@@ -33,6 +33,8 @@ private:
     int size;       // Size of the hash table.
     Node** table;   // Pointer to array of pointers to student nodes
 
+    void resize();
+
     // Hash function
     int hash(int id) {
         return id % size;
