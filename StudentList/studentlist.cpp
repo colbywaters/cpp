@@ -176,6 +176,9 @@ int main()
     std::cout << std::fixed;
     std::cout << std::setprecision(2);
 
+    int initialSize = 100;
+    HashTable hashTable(initialSize);
+
     // Parser for commands
     //   ADD -    Creates a new entry for a student.  After you type in add, the program
     //            should prompt for first name, last name, student id, and GPA.  That student
