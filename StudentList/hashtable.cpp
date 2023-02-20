@@ -129,11 +129,12 @@ void HashTable::resize()
  */
 void HashTable::print() {
     for (int i = 0; i < size; i++) {
-        cout << "Index " << i << ": ";
+        cout << "Index " << i << ": "; // << std::flush;
+
         Node* current = table[i];
         while (current != nullptr) {
             Student* student = current->getStudent();
-            cout << "[" << student->id << ", " << student->fname << " " << student->lname << ", " << student->gpa << "] ";
+            cout << "[" << student->id << ", " << student->gpa << ", " << student->fname << " " << student->lname << "] ";
             current = current->getNext();
         }
         cout << endl;

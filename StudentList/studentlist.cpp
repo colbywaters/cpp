@@ -7,6 +7,9 @@
 #include <iostream>
 #include <iomanip>
 #include <cstring>
+#include <fstream>
+#include <vector>
+#include <string>
 
 #include "node.h"
 #include "student.h"
@@ -107,6 +110,45 @@ uint32_t getStudentId()
 }
 
 /*
+ * Create a random student with a first name, last name, ID, and GPA
+ */
+Student* createRandomStudent(int id) {
+
+    float gpa = ((float)rand()/(float)(RAND_MAX)) * 4.0f;
+
+    // @note Complete pain to use cstring and array for this!
+    //       Let's use C++ instead of C?
+    std::ifstream firstNamesFile("first_names.txt");
+    std::vector<std::string> firstNames;
+    std::string fName;
+    while (std::getline(firstNamesFile, fName)) {
+        firstNames.push_back(fName.substr(0, fName.size() - 1));
+    }
+    firstNamesFile.close();
+
+    // read in last names from file
+    std::ifstream lastNamesFile("last_names.txt");
+    std::vector<std::string> lastNames;
+    std::string lName;
+    while (std::getline(lastNamesFile, lName)) {
+        lastNames.push_back(lName.substr(0, lName.size() - 1));
+    }
+    lastNamesFile.close();
+
+    // generate a random first and last name
+    int numFirstNames = firstNames.size();
+    int numLastNames = lastNames.size();
+
+    std::string firstName = firstNames[rand() % (numFirstNames - 1)];
+    std::string lastName = lastNames[rand() % (numLastNames - 1)];
+
+    // create the student with the generated information
+    Student* s = new Student(id, gpa, firstName.c_str(), lastName.c_str());
+
+    return s;
+}
+
+/*
  * main - This is main function for student list!
  */
 int main()
@@ -114,6 +156,11 @@ int main()
     // Set precion for cout to 2 decimal places
     std::cout << std::fixed;
     std::cout << std::setprecision(2);
+
+   time_t t;
+   
+   /* Intializes random number generator */
+   srand((unsigned) time(&t));
 
     int initialSize = 100;
     HashTable hashTable(initialSize);
@@ -137,6 +184,7 @@ int main()
     cout << "   ADD - Creates new entry for a student." << endl;
     cout << "   PRINT - Prints out all students in list." << endl;
     cout << "   DELETE - Deletes student with ID from list." << endl;
+    cout << "   GENERATE - Generate random students." << endl;
     cout << "   AVERAGE - Averages students GPA from list." << endl;
     cout << "   QUIT - Exits Student List program." << endl;
     cout << "------------------------------------------------" << endl;
@@ -161,6 +209,17 @@ int main()
 
             // Print student
             hashTable.print();
+        }
+        else if (strcmp(command, "GENERATE") == 0)
+        {
+            int numStudents;
+            cout << "Enter number of students to generate: ";
+            cin >> numStudents;
+            for (int i = 0; i < numStudents; i++) {
+                Student* s = createRandomStudent(i);
+                hashTable.add(s);
+            }
+            cout << "Generated " << numStudents << " students." << endl;
         }
         else if (strcmp(command, "AVERAGE") == 0)
         {

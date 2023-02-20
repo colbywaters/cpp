@@ -8,6 +8,10 @@
 #ifndef Student_H
 #define Student_H
 
+#include <iostream>
+
+using namespace std;
+
 /*
  * Student - information for each student
  */
