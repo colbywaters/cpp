@@ -52,18 +52,26 @@ Node* addStudentToList(Node* students, Node* newnode)
  */
 Node* addStudent(Node* students)
 {
-    Student* s = new Student();
+    int id = 0;
+    float gpa = 0.0f;
+    char fname[256];
+    char lname[256];
+
     cout << "-------------------------------" << endl;
     cout << "Enter Student Information" << endl;
     cout << "-------------------------------" << endl;
     cout << "First Name: ";
-    cin >> s->fname;
+    cin >> fname;
     cout << "Last Name: ";
-    cin >> s->lname;
+    cin >> lname;
     cout << "Id: ";
-    cin >> s->id;
+    cin >> id;
     cout << "GPA: ";
-    cin >> s->gpa;
+    cin >> gpa;
+
+    // @todo We can do error checking here and only create
+    //       a student if id and gpa are legit.
+    Student* s = new Student(id, gpa, fname, lname);
 
     Node* newnode = new Node(s);
 
