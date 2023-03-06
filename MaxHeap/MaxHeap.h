@@ -21,6 +21,8 @@ public:
 
     void buildHeap(int arr[], int n);
 
+    void buildHeapFromFile(const char* fileName);
+
     void insert(int value);
 
     int removeMax();

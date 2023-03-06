@@ -26,7 +26,10 @@ int main() {
         while (cin >> value && value != -1)
             heap.insert(value);
     } else if (choice == 2) {
-        /* Todo! */
+        char fileName[256];
+        cout << "Enter filename: ";
+        cin >> fileName;
+        heap.buildHeapFromFile(fileName);
     } else {
         cout << "Invalid choice! It needs to be either 1 or 2." << endl;
         return 0;

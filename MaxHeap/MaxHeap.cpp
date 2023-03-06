@@ -99,3 +99,16 @@ void MaxHeap::buildHeap(int arr[], int n) {
     for (int i = size / 2; i >= 1; i--)
         heapify(i);
 }
+
+/*
+ * Build heap from provided array of numbers in file.
+ */
+void MaxHeap::buildHeapFromFile(const char* fileName) {
+    ifstream fin(fileName);
+
+    int value;
+    while (fin >> value)
+        insert(value);
+
+    fin.close();
+}
