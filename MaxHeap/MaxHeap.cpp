@@ -42,6 +42,29 @@ void MaxHeap::insert(int value) {
 }
 
 /*
+ * Remove max element from heap which will be first element. Then need to re-heapify the rest.
+ */
+int MaxHeap::removeMax() {
+    if (size == 0)
+        return -1;
+
+    int maxVal = arr[1];
+    arr[1] = arr[size--];
+    heapify(1);
+
+    return maxVal;
+}
+
+/*
+ * Empty the heap by continually removing max element until all elements are gone.
+ */
+void MaxHeap::removeAll() {
+    while (size > 0)
+        cout << removeMax() << " ";
+    cout << endl;
+}
+
+/*
  * Build heap from provided array and size n.
  */
 void MaxHeap::buildHeap(int arr[], int n) {

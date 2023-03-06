@@ -33,5 +33,8 @@ int main() {
         return 0;
     }
 
+    cout << endl << "Max heap numbers: ";
+    heap.removeAll();
+
     return 0;
 }

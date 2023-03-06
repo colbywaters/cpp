@@ -23,6 +23,10 @@ public:
 
     void insert(int value);
 
+    int removeMax();
+
+    void removeAll();
+
 private:
     int arr[MAX_SIZE];
     int size;
