@@ -36,7 +36,7 @@ int main() {
     }
 
     cout << endl << "Heap tree: " << endl;
-    heap.display(0);
+    heap.display(1);
 
     cout << endl << "Max heap numbers: ";
     heap.removeAll();

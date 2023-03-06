@@ -72,20 +72,20 @@ void MaxHeap::removeAll() {
  */
 void MaxHeap::display(int i, int indent)
 {
-    cout << "display( " << i << ", " << indent << " )" << endl;
-    cout << "size = " << size << endl;
+    // cout << "display( " << i << ", " << indent << " )" << endl;
     if (i > size)
     {
-        cout << "Stop recursing!" << endl;
         return; // stop recursion if we've gone past the end of the heap
     }
-    if (indent > 16) return;
 
-    cout << "   right" << endl;
-    display(2*i + 1, indent+4); // recursively display the right subtree
-    std::cout << setw(indent) << "" << arr[i] << endl; // print the current node with indentation
-    cout << "   left" << endl;
-    display(2*i, indent+4); // recursively display the left subtree
+    // recursively display the right subtree
+    display(2*i + 1, indent+4);
+
+    // print the current node with indentation
+    std::cout << setw(indent) << "" << arr[i] << endl;
+
+    // recursively display the left subtree
+    display(2*i, indent+4);
 }
 
 /*
