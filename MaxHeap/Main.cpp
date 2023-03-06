@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 
 #include "MaxHeap.h"
 
@@ -32,6 +31,9 @@ int main() {
         cout << "Invalid choice! It needs to be either 1 or 2." << endl;
         return 0;
     }
+
+    cout << endl << "Heap tree: " << endl;
+    heap.display(0);
 
     cout << endl << "Max heap numbers: ";
     heap.removeAll();

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include "MaxHeap.h"
 
@@ -39,6 +40,8 @@ void MaxHeap::insert(int value) {
         swap(arr[i], arr[i / 2]);
         i /= 2;
     }
+
+    cout << "size: " << size << endl;
 }
 
 /*
@@ -62,6 +65,27 @@ void MaxHeap::removeAll() {
     while (size > 0)
         cout << removeMax() << " ";
     cout << endl;
+}
+
+/*
+ * Display the heap.
+ */
+void MaxHeap::display(int i, int indent)
+{
+    cout << "display( " << i << ", " << indent << " )" << endl;
+    cout << "size = " << size << endl;
+    if (i > size)
+    {
+        cout << "Stop recursing!" << endl;
+        return; // stop recursion if we've gone past the end of the heap
+    }
+    if (indent > 16) return;
+
+    cout << "   right" << endl;
+    display(2*i + 1, indent+4); // recursively display the right subtree
+    std::cout << setw(indent) << "" << arr[i] << endl; // print the current node with indentation
+    cout << "   left" << endl;
+    display(2*i, indent+4); // recursively display the left subtree
 }
 
 /*

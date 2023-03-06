@@ -27,6 +27,8 @@ public:
 
     void removeAll();
 
+    void display(int i, int indent = 0);
+
 private:
     int arr[MAX_SIZE];
     int size;
