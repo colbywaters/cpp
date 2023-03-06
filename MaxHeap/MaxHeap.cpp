@@ -26,6 +26,22 @@ void MaxHeap::heapify(int i)
 }
 
 /*
+ * Build Max Heap data structure from array (private data).
+ */
+void MaxHeap::insert(int value) {
+    if (size == MAX_SIZE)
+        return;
+
+    arr[++size] = value;
+    int i = size;
+
+    while (i > 1 && arr[i] > arr[i / 2]) {
+        swap(arr[i], arr[i / 2]);
+        i /= 2;
+    }
+}
+
+/*
  * Build heap from provided array and size n.
  */
 void MaxHeap::buildHeap(int arr[], int n) {

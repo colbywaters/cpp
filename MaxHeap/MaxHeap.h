@@ -21,6 +21,8 @@ public:
 
     void buildHeap(int arr[], int n);
 
+    void insert(int value);
+
 private:
     int arr[MAX_SIZE];
     int size;
