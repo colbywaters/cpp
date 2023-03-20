@@ -1,6 +1,8 @@
 /*
  * Shunting Yard implementation
  *
+ * Build with g++ -o shuntingyard shuntingyard.cpp node.cpp stack.cpp queue.cpp
+ *
  * Colby Waters
  * 3/19/2023
  */
