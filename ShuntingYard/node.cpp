@@ -1,17 +1,20 @@
-#include <iostream>
-#include <cstring>
-
+/*
+ * Node implementation
+ *
+ * Colby Waters
+ * 3/19/2023
+ */
 #include "node.h"
 
 using namespace std;
 
 Node::Node() {
-  nextNode = NULL;
+  nextNode = nullptr;
 }
 
 Node::Node(char c) {
   data = c;
-  nextNode = NULL;
+  nextNode = nullptr;
 }
 
 Node::~Node() {
@@ -30,4 +33,3 @@ char Node::getData() {
 void Node::setNext(Node* newNode) {
   nextNode = newNode;
 }
-

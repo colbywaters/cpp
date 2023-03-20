@@ -9,21 +9,26 @@
 #ifndef Node_H
 #define Node_H
 
-class Node {
- public:
-  Node();
-  Node(char);
-  ~Node();
-  //returns next node
-  Node* getNext();
-  //returns character
-  char getData();
-  //sets nextNode to the Node*
-  void setNext(Node*);
-  
- private:
-  Node* nextNode;
-  char data;   // The data is a character in this case!
+/*
+ * Node class definition for characters
+ */
+class Node
+{
+public:
+    Node();
+    Node(char);
+    ~Node();
+    //returns next node
+    Node* getNext();
+    //returns character
+    char getData();
+
+    //sets nextNode to the Node*
+    void setNext(Node*);
+
+private:
+    Node* nextNode;
+    char data;   // The data is a character in this case!
 };
 
 #endif
