@@ -1,25 +1,29 @@
+/*
+ * Node definition
+ *
+ * Update: Needed to update Node to use character!
+ *
+ * Colby Waters
+ * 3/19/2023
+ */
 #ifndef Node_H
 #define Node_H
-
-#include <iostream>
-#include <cstring>
-#include "student.h"
 
 class Node {
  public:
   Node();
-  Node(Student*);
+  Node(char);
   ~Node();
   //returns next node
   Node* getNext();
-  //returns myStudent
-  Student* getStudent();
+  //returns character
+  char getData();
   //sets nextNode to the Node*
   void setNext(Node*);
   
  private:
   Node* nextNode;
-  Student* myStudent; // = new Student();
+  char data;   // The data is a character in this case!
 };
 
 #endif

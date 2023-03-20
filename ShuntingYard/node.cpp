@@ -6,33 +6,25 @@
 using namespace std;
 
 Node::Node() {
-  cout << "a blank node was created" << endl;
   nextNode = NULL;
 }
 
-
-Node::Node(Student* newStudent) {
-  //cout << "hello world" << endl;
-  myStudent = newStudent;
+Node::Node(char c) {
+  data = c;
   nextNode = NULL;
-  
 }
-
 
 Node::~Node() {
-  //free both node and student
-  //student needsto be deleted
-  //in a way that calls its own deconstructor
+  // free next node? Not sure that should be done here.
   delete nextNode;
-  delete myStudent;
 }
 
 Node* Node::getNext() {
   return nextNode;
 }
 
-Student* Node::getStudent() {
-  return myStudent;
+char Node::getData() {
+  return data;
 }
 
 void Node::setNext(Node* newNode) {
