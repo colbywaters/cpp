@@ -4,6 +4,8 @@
  * Colby Waters
  * 4/7/2023
  */
+#include <iostream>
+#include <cstring>
 #include "node.h"
 
 using namespace std;
@@ -33,7 +35,7 @@ Node* Node::getRight() {
   return right;
 }
 
-uint32_t Node::getNumber() {
+uint32_t Node::getData() {
   return number;
 }
 

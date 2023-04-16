@@ -6,6 +6,9 @@
  * Colby Waters
  * 4/7/2023
  */
+
+using namespace std;
+
 #ifndef Node_H
 #define Node_H
 
@@ -22,7 +25,7 @@ public:
     Node* getLeft();
     Node* getRight();
 
-    uint32_t getNumber();
+    uint32_t getData();
 
     // Set children
     void setLeft(Node*);
@@ -34,4 +37,4 @@ private:
     uint32_t number;
 };
 
-#endif
+#endif // Node_H
