@@ -39,6 +39,11 @@ uint32_t Node::getData() {
   return number;
 }
 
+void Node::setData(uint32_t n)
+{
+    number = n; 
+}
+
 void Node::setLeft(Node* newNode) {
   left = newNode;
 }

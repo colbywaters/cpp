@@ -26,6 +26,7 @@ public:
     Node* getRight();
 
     uint32_t getData();
+    void setData(uint32_t n);
 
     // Set children
     void setLeft(Node*);
