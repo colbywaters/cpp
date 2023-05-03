@@ -48,6 +48,28 @@ void Node::setLeft(Node* newNode) {
   left = newNode;
 }
 
+NodeColor Node::getColor()
+{
+    return color;
+}
+
+void Node::setColor(NodeColor c)
+{
+    color = c;
+}
+
+// Set parent
+void Node::setParent(Node* p)
+{
+    parent = p;
+}
+
+// Get parent
+Node* Node::getParent()
+{
+    return parent;
+}
+
 void Node::setRight(Node* newNode) {
   right = newNode;
 }

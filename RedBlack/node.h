@@ -13,6 +13,15 @@ using namespace std;
 #define Node_H
 
 /*
+ * Color for node
+ */
+enum NodeColor
+{
+    BLACK,
+    RED
+};
+
+/*
  * Node class definition for characters
  */
 class Node
@@ -22,19 +31,31 @@ public:
     Node(uint32_t);
     ~Node();
 
-    Node* getLeft();
-    Node* getRight();
-
-    uint32_t getData();
-    void setData(uint32_t n);
-
     // Set children
     void setLeft(Node*);
     void setRight(Node*);
 
+    // Get children
+    Node* getLeft();
+    Node* getRight();
+
+    // Set parent
+    void setParent(Node*);
+
+    // Get parent
+    Node* getParent();
+
+    uint32_t getData();
+    void setData(uint32_t n);
+
+    NodeColor getColor();
+    void setColor(NodeColor c);
+
 private:
     Node* left;
     Node* right;
+    Node* parent;
+    NodeColor color;
     uint32_t number;
 };
 

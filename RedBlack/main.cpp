@@ -9,7 +9,7 @@
 #include <string>
 #include <sstream>
 
-#include "binarytree.h"
+#include "redblacktree.h"
 
 using namespace std;
 
@@ -33,11 +33,11 @@ int main()
     bool hasQuit = false;
 
     cout << "------------------------------------------------" << endl;
-    cout << " Binary Tree - Colby Waters" << endl;
+    cout << " Red Black Tree - Colby Waters" << endl;
     cout << "------------------------------------------------" << endl;
     printCommands();
     
-    BinaryTree tree;
+    RedBlackTree tree;
 
     // Main command parser loop
     while(hasQuit == false)

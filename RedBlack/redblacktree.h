@@ -1,23 +1,23 @@
 /*
- * Binary tree definition
+ * Red black tree definition
  *
  * Colby Waters
  * 4/7/2023
  */
-#ifndef BinaryTree_H
-#define BinaryTree_H
+#ifndef RedBlackTree_H
+#define RedBlackTree_H
 
 #include "node.h"
 
 /*
- * BinaryTree class definition
+ * RedBlackTree class definition
  */
-class BinaryTree
+class RedBlackTree
 {
 public:
     // Constructor / Destructor
-    BinaryTree();
-    ~BinaryTree();
+    RedBlackTree();
+    ~RedBlackTree();
 
     // Methods for adding, removing, and searching for values
     void add(uint32_t val);
@@ -28,6 +28,9 @@ public:
     void print();
 
 private:
+
+    void rotateLeft(Node* node);
+    void rotateRight(Node* node);
 
     // Method to search for a node in the binary search tree
     bool searchNode(Node* node, uint32_t data);
@@ -42,4 +45,4 @@ private:
     Node* root;
 };
 
-#endif // BinaryTree_H
+#endif // RedBlackTree_H
