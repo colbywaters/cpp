@@ -150,8 +150,37 @@ void RedBlackTree::add(uint32_t val)
                 grandParent->setColor(RED);
                 rotateLeft(grandParent);
             }
+        // If parent is the right child of the grandparent.
+        } else {
+            uncle = grandParent->getLeft();
+
+            if (uncle != nullptr && uncle->getColor() == RED) {
+                parent->setColor(BLACK);
+                uncle->setColor(BLACK);
+                grandParent->setColor(RED);
+                newNode = grandParent;
+                parent = newNode->getParent();
+                grandParent = parent->getParent();
+            }
+            else
+            {
+                if (newNode == parent->getLeft()) {
+                    rotateRight(parent);
+
+                    Node* temp = parent;
+                    parent = newNode;
+                    newNode = temp;
+                }
+
+                // Uncle is black and new node is a right child
+                parent->setColor(BLACK);
+                grandParent->setColor(RED);
+                rotateLeft(grandParent);
+            }
         }
     }
+
+    root->setColor(BLACK);
 }
 
 // Method to remove a node from the RedBlack search tree
@@ -264,9 +293,16 @@ void RedBlackTree::print()
 
 // Method to print the RedBlack search tree in a visual way
 void RedBlackTree::printTree(Node* node, uint32_t indent) {
-    if (node == NULL) {
+    cout << "printTree called ";
+
+    if (node == nullptr) {
+        cout << "node is nullptr" << endl;
         return;
     }
+    cout << "node is valid" << endl;
+
+
+    cout << "  calling print for right" << endl;
     printTree(node->getRight(), indent + 4);
 
     for (uint32_t i = 0; i < indent; i++) {
@@ -283,6 +319,7 @@ void RedBlackTree::printTree(Node* node, uint32_t indent) {
         cout << " P( " << node->getParent()->getData() << ")";
     }
     
+    cout << "  calling print for left" << endl;
     printTree(node->getLeft(), indent + 4);
 }
 
