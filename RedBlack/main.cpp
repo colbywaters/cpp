@@ -8,6 +8,7 @@
 #include <cstring>
 #include <string>
 #include <sstream>
+#include <fstream>
 
 #include "redblacktree.h"
 
@@ -26,18 +27,50 @@ void printCommands()
 }
 
 /*
+ * addFromFile - Add numbers from a file. Numbers are on a single line and separated by a space.
+ */
+void addFromFile(const char* filename, RedBlackTree& tree)
+{
+    std::ifstream inFile(filename);
+
+    if (!inFile.is_open()) {
+        std::cerr << "Error: Could not open file \"" << filename << "\" for reading.\n";
+        return;
+    }
+
+    int num;
+
+    while (inFile >> num) {
+        tree.add(num);
+    }
+    inFile.close();
+}
+
+/*
  * main - This is main function for binary tree. Implements main parser.
  */
 int main()
 {
+    RedBlackTree tree;
+
+    addFromFile("numbers.txt", tree);
+
+    tree.print();
+
+    return 0;
+}
+
+/*
+int main()
+{
+    RedBlackTree tree;
+
     bool hasQuit = false;
 
     cout << "------------------------------------------------" << endl;
     cout << " Red Black Tree - Colby Waters" << endl;
     cout << "------------------------------------------------" << endl;
     printCommands();
-    
-    RedBlackTree tree;
 
     // Main command parser loop
     while(hasQuit == false)
@@ -46,15 +79,15 @@ int main()
         cout << "cmd>: ";
         cin.getline(command,sizeof(command));
 
-        if (strcmp(command, "ADD") == 0)
+        if (strcmp(command, "ADD") == 0 || strcmp(command, "add") == 0)
         {
-            cout << "Enter number: ";
+            cout << "Enter filename where numbers come from: ";
             cin.getline(command, sizeof(command));
 
-            uint32_t num = atoi(command);
+            addFromFile(command, tree);
 
             // Add media entry
-            tree.add(num);
+            //tree.add(num);
         }
         else if (strcmp(command, "SEARCH") == 0)
         {
@@ -72,11 +105,11 @@ int main()
                 cout << "Did not find number!" << endl;
             }
         }
-        else if (strcmp(command, "PRINT") == 0)
+        else if (strcmp(command, "PRINT") == 0 || strcmp(command, "print") == 0)
         {
             tree.print();
         }
-        else if (strcmp(command, "DELETE") == 0)
+        else if (strcmp(command, "DELETE") == 0 || strcmp(command, "delete") == 0)
         {
             cout << "Enter number: ";
             cin.getline(command, sizeof(command));
@@ -86,7 +119,7 @@ int main()
             // Delete media entry
             tree.remove(num);
         }
-        else if (strcmp(command, "QUIT") == 0)
+        else if (strcmp(command, "QUIT") == 0 || strcmp(command, "quit") == 0)
         {
           cout << "QUIT command received" << endl;
           hasQuit = true;
@@ -100,3 +133,4 @@ int main()
         }
     }
 }
+*/

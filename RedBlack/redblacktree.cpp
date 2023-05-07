@@ -110,6 +110,15 @@ void RedBlackTree::add(uint32_t val)
         return;
     }
 
+    if (newNode->getData() > parent->getData())
+    {        
+        parent->setRight(newNode);        
+    }
+    else
+    {
+        parent->setLeft(newNode);
+    }
+
     if (parent->getColor() == BLACK)
     {
         return;
@@ -118,7 +127,7 @@ void RedBlackTree::add(uint32_t val)
     Node* grandParent = parent->getParent();
     Node* uncle = nullptr;
 
-    while(parent->getColor() == RED)
+    while(grandParent != nullptr && parent != nullptr && parent->getColor() == RED)
     {
         if (parent == grandParent->getLeft())
         {
@@ -129,10 +138,15 @@ void RedBlackTree::add(uint32_t val)
             {
                 parent->setColor(BLACK);
                 uncle->setColor(BLACK);
+
                 grandParent->setColor(RED);
                 newNode = grandParent;
                 parent = newNode->getParent();
-                grandParent = parent->getParent();
+
+                if (parent != nullptr)
+                {
+                    grandParent = parent->getParent();
+                }
             }
             else
             {
@@ -287,28 +301,29 @@ void RedBlackTree::printInOrder(Node* node) {
 // Public method for printing RedBlack tree.
 void RedBlackTree::print()
 {
-    cout << "root is " << root->getData() << endl;
+    cout << "Root value is " << root->getData() << endl;
+
+    if (root->getParent())
+    {
+        cout << "Root parent value is " << root->getParent()->getData() << endl;
+    }
+
     printTree(root, 4);
 }
 
 // Method to print the RedBlack search tree in a visual way
 void RedBlackTree::printTree(Node* node, uint32_t indent) {
-    cout << "printTree called ";
 
     if (node == nullptr) {
-        cout << "node is nullptr" << endl;
         return;
     }
-    cout << "node is valid" << endl;
 
-
-    cout << "  calling print for right" << endl;
     printTree(node->getRight(), indent + 4);
 
     for (uint32_t i = 0; i < indent; i++) {
         cout << " ";
     }
-    cout << node->getData() << endl;
+    cout << node->getData();
     if (node->getColor() == BLACK) {
         cout << " B";
     } else {
@@ -318,8 +333,8 @@ void RedBlackTree::printTree(Node* node, uint32_t indent) {
     {
         cout << " P( " << node->getParent()->getData() << ")";
     }
+    cout << endl;
     
-    cout << "  calling print for left" << endl;
     printTree(node->getLeft(), indent + 4);
 }
 
