@@ -19,6 +19,7 @@ void printCommands()
 {
       cout << "Enter commands to add, search, delete, and print binary tree." << endl;
       cout << "   ADD - Add number to binary tree." << endl;
+      cout << "   FILE - Add numbers from file to binary tree." << endl;
       cout << "   SEARCH - Search for number in binary tree." << endl;
       cout << "   REMOVE - Deletes number in tree." << endl;
       cout << "   PRINT - Prints tree." << endl;
@@ -82,13 +83,20 @@ int main()
 
         if (strcmp(command, "ADD") == 0 || strcmp(command, "add") == 0)
         {
+            cout << "Enter number to add: ";
+            cin.getline(command, sizeof(command));
+
+            uint32_t num = atoi(command);
+
+            // Add media entry
+            tree.add(num);
+        }
+        else if (strcmp(command, "FILE") == 0 || strcmp(command, "file") == 0)
+        {
             cout << "Enter filename where numbers come from: ";
             cin.getline(command, sizeof(command));
 
             addFromFile(command, tree);
-
-            // Add media entry
-            //tree.add(num);
         }
         else if (strcmp(command, "SEARCH") == 0)
         {
