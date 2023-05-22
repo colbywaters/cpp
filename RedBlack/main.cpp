@@ -20,7 +20,7 @@ void printCommands()
       cout << "Enter commands to add, search, delete, and print binary tree." << endl;
       cout << "   ADD - Add number to binary tree." << endl;
       cout << "   SEARCH - Search for number in binary tree." << endl;
-      cout << "   DELETE - Deletes number in tree." << endl;
+      cout << "   REMOVE - Deletes number in tree." << endl;
       cout << "   PRINT - Prints tree." << endl;
       cout << "   QUIT - Exits program." << endl;
       cout << "------------------------------------------------" << endl;
@@ -49,6 +49,7 @@ void addFromFile(const char* filename, RedBlackTree& tree)
 /*
  * main - This is main function for binary tree. Implements main parser.
  */
+/*
 int main()
 {
     RedBlackTree tree;
@@ -59,8 +60,8 @@ int main()
 
     return 0;
 }
+*/
 
-/*
 int main()
 {
     RedBlackTree tree;
@@ -109,7 +110,7 @@ int main()
         {
             tree.print();
         }
-        else if (strcmp(command, "DELETE") == 0 || strcmp(command, "delete") == 0)
+        else if (strcmp(command, "REMOVE") == 0 || strcmp(command, "remove") == 0)
         {
             cout << "Enter number: ";
             cin.getline(command, sizeof(command));
@@ -133,4 +134,3 @@ int main()
         }
     }
 }
-*/
