@@ -25,9 +25,15 @@ void RedBlackTree::rotateLeft(Node* node)
     if (node == nullptr) { return; }
 
     Node* right = node->getRight();
+
+    if (right == nullptr)
+    {
+        return;
+    }
+
     node->setRight(right->getLeft());
 
-    if (right->getLeft() == nullptr)
+    if (right->getLeft() != nullptr)
     {
         right->getLeft()->setParent(node);
     }
@@ -54,11 +60,17 @@ void RedBlackTree::rotateLeft(Node* node)
 void RedBlackTree::rotateRight(Node* node)
 {
     if (node == nullptr) { return; }
-    
+
     Node* left = node->getLeft();
+
+    if (left == nullptr)
+    {
+        return;
+    }
+
     node->setRight(left->getRight());
 
-    if (left->getRight() == nullptr)
+    if (left->getRight() != nullptr)
     {
         left->getRight()->setParent(node);
     }
@@ -182,6 +194,7 @@ void RedBlackTree::add(uint32_t val)
             }
             else
             {
+
                 if (newNode == parent->getLeft()) {
                     rotateRight(parent);
 
