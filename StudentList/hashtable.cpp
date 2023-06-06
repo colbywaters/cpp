@@ -44,12 +44,12 @@ HashTable::~HashTable() {
  * Add a new student to the hash table
  */
 void HashTable::add(Student* student) {
-    int index = hash(student->id);
+    int index = hash(student->id, size);
     Node* node = new Node(student);
     if (table[index] == nullptr) {
         table[index] = node;
     } else {
-        int numCollisions = 1;        
+        int numCollisions = 1;     
         Node* current = table[index];
         while (current->getNext() != nullptr) {
             current = current->getNext();
@@ -57,8 +57,10 @@ void HashTable::add(Student* student) {
         }
         current->setNext(node);
 
-        if (numCollisions > 3)
+        if (numCollisions >= 3)
         {
+            // numCollisions variable only counts what is already in list and not new.
+            cout << "We have more than 3 collisions! Need to resize!" << endl;
             resize();
         }
     }
@@ -68,7 +70,7 @@ void HashTable::add(Student* student) {
  * Delete a student from the hash table
  */
 void HashTable::remove(int id) {
-    int index = hash(id);
+    int index = hash(id, size);
 
     Node* current = table[index];
     Node* prev = nullptr;
@@ -95,24 +97,51 @@ void HashTable::remove(int id) {
  */
 void HashTable::resize()
 {
+    // 1. Construct new table that is twice the size as old table.
     int newSize = this->size * 2;
-    Node** newTable = new Node*[newSize]();
-    int oldSize = size;
-    size = newSize;
-    
+    Node** newTable = new Node*[newSize];
+    for (int i = 0; i < newSize; i++) {
+        newTable[i] = nullptr;
+    }
+
+    ///////////////////////////////////////////
     // rehash existing students into new table
-    for (int i = 0; i < oldSize; i++) {
+
+    // 2. Traverse through old table and move all nodes to new hash table.
+    for (int i = 0; i < size; i++)
+    {
         Node* current = table[i];
-        while (current != nullptr) {
-            int index = hash(current->getStudent()->id);
-            Node* newNode = new Node(current->getStudent());
-            newTable[index] = newNode;
+
+        // Traverse list for this hast table entry.
+        while (current != nullptr)
+        {
+            // ----------------------------------------------------
+            // Add new node to new hash table.
+            Student* pStudent = current->getStudent();
+
+            int index = hash(pStudent->id, newSize);
+            Node* pNewNode = new Node(pStudent);
+
+            // If new table entry is empty then just add it.
+            if (newTable[index] == nullptr) {
+                newTable[index] = pNewNode;
+            // Otherwise, add to end of list. Never should have more than 3 collisions.
+            } else {
+                Node* newcurrent = newTable[index];
+
+                while (newcurrent->getNext() != nullptr) {
+                    newcurrent = newcurrent->getNext();
+                }
+                newcurrent->setNext(pNewNode);
+            }
+
+            // ----------------------------------------------------
             current = current->getNext();
         }
     }
     
-    // delete old table
-    for (int i = 0; i < oldSize; i++) {
+    // 3. Delete old table
+    for (int i = 0; i < size; i++) {
         Node* current = table[i];
         while (current != nullptr) {
             Node* temp = current;
@@ -120,8 +149,12 @@ void HashTable::resize()
             delete temp;
         }
     }
+
+    // 4. Update table to new table.
     delete[] table;
     table = newTable;
+    int oldSize = size;
+    size = newSize;
 }
 
 /*

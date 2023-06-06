@@ -36,8 +36,8 @@ private:
     void resize();
 
     // Hash function
-    int hash(int id) {
-        return id % size;
+    int hash(int id, int s) {
+        return id % s;
     }
 
     // Helper function to create a new student node
