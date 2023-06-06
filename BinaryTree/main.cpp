@@ -8,6 +8,7 @@
 #include <cstring>
 #include <string>
 #include <sstream>
+#include <fstream>
 
 #include "binarytree.h"
 
@@ -18,11 +19,32 @@ void printCommands()
 {
       cout << "Enter commands to add, search, delete, and print binary tree." << endl;
       cout << "   ADD - Add number to binary tree." << endl;
+      cout << "   FILE - Add numbers from file to binary tree." << endl;
       cout << "   SEARCH - Search for number in binary tree." << endl;
       cout << "   DELETE - Deletes number in tree." << endl;
       cout << "   PRINT - Prints tree." << endl;
       cout << "   QUIT - Exits program." << endl;
       cout << "------------------------------------------------" << endl;
+}
+
+/*
+ * addFromFile - Add numbers from a file. Numbers are on a single line and separated by a space.
+ */
+void addFromFile(const char* filename, BinaryTree& tree)
+{
+    std::ifstream inFile(filename);
+
+    if (!inFile.is_open()) {
+        std::cerr << "Error: Could not open file \"" << filename << "\" for reading.\n";
+        return;
+    }
+
+    int num;
+
+    while (inFile >> num) {
+        tree.add(num);
+    }
+    inFile.close();
 }
 
 /*
@@ -55,6 +77,13 @@ int main()
 
             // Add media entry
             tree.add(num);
+        }
+        else if (strcmp(command, "FILE") == 0 || strcmp(command, "file") == 0)
+        {
+            cout << "Enter filename where numbers come from: ";
+            cin.getline(command, sizeof(command));
+
+            addFromFile(command, tree);
         }
         else if (strcmp(command, "SEARCH") == 0)
         {

@@ -155,6 +155,11 @@ void BinaryTree::printInOrder(Node* node) {
 // Public method for printing binary tree.
 void BinaryTree::print()
 {
+    if (root == nullptr)
+    {
+        cout << "Emptry tree!" << endl;
+        return;
+    }
     cout << "root is " << root->getData() << endl;
     printTree(root, 4);
 }
