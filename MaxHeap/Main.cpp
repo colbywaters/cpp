@@ -38,6 +38,10 @@ int main() {
     cout << endl << "Heap tree: " << endl;
     heap.display(1);
 
+    cout << endl << "Removing Max Number:" << endl;
+    heap.removeMax();
+    heap.display(1);
+
     cout << endl << "Max heap numbers: ";
     heap.removeAll();
 
