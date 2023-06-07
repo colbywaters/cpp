@@ -190,7 +190,13 @@ void RedBlackTree::add(uint32_t val)
                 grandParent->setColor(RED);
                 newNode = grandParent;
                 parent = newNode->getParent();
-                grandParent = parent->getParent();
+                if (parent != nullptr)
+                {
+                    grandParent = parent->getParent();
+                }
+                else {
+                    grandParent = nullptr;
+                }
             }
             else
             {
@@ -323,7 +329,7 @@ void RedBlackTree::print()
         cout << "Empty tree!" << endl;
         return;
     }
-    
+
     cout << "Root value is " << root->getData() << endl;
 
     if (root->getParent())
