@@ -318,6 +318,12 @@ void RedBlackTree::printInOrder(Node* node) {
 // Public method for printing RedBlack tree.
 void RedBlackTree::print()
 {
+    if (root == nullptr)
+    {
+        cout << "Empty tree!" << endl;
+        return;
+    }
+    
     cout << "Root value is " << root->getData() << endl;
 
     if (root->getParent())
