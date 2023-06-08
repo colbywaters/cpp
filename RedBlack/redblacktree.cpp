@@ -220,6 +220,92 @@ void RedBlackTree::add(uint32_t val)
     root->setColor(BLACK);
 }
 
+void RedBlackTree::rebalanceAfterRemoval(Node* node, Node* parent)
+{
+    Node* sibling;
+    while (node != root && (node == nullptr || node->getColor() == BLACK))
+    {
+        if (node == parent->getLeft())
+        {
+            sibling = parent->getRight();
+
+            if (sibling->getColor() == RED)
+            {
+                sibling->setColor(BLACK);
+                parent->setColor(RED);
+                rotateLeft(parent);
+                sibling = parent->getRight();
+            }
+
+            if ((sibling->getLeft() == nullptr || sibling->getLeft()->getColor() == BLACK) &&
+                (sibling->getRight() == nullptr || sibling->getRight()->getColor() == BLACK))
+            {
+                sibling->setColor(RED);
+                node = parent;
+                parent = node->getParent();
+            }
+            else
+            {
+                if (sibling->getRight() == nullptr || sibling->getRight()->getColor() == BLACK)
+                {
+                    sibling->getLeft()->setColor(BLACK);
+                    sibling->setColor(RED);
+                    rotateRight(sibling);
+                    sibling = parent->getRight();
+                }
+
+                sibling->setColor(parent->getColor());
+                parent->setColor(BLACK);
+                sibling->getRight()->setColor(BLACK);
+                rotateLeft(parent);
+                node = root; // Terminate the loop
+            }
+        }
+        else
+        {
+            sibling = parent->getLeft();
+
+            if (sibling->getColor() == RED)
+            {
+                sibling->setColor(BLACK);
+                parent->setColor(RED);
+                rotateRight(parent);
+                sibling = parent->getLeft();
+            }
+
+            if ((sibling->getRight() == nullptr || sibling->getRight()->getColor() == BLACK) &&
+                (sibling->getLeft() == nullptr || sibling->getLeft()->getColor() == BLACK))
+            {
+                sibling->setColor(RED);
+                node = parent;
+                parent = node->getParent();
+            }
+            else
+            {
+                if (sibling->getLeft() == nullptr || sibling->getLeft()->getColor() == BLACK)
+                {
+                    sibling->getRight()->setColor(BLACK);
+                    sibling->setColor(RED);
+                    rotateLeft(sibling);
+                    sibling = parent->getLeft();
+                }
+
+                sibling->setColor(parent->getColor());
+                parent->setColor(BLACK);
+                sibling->getLeft()->setColor(BLACK);
+                rotateRight(parent);
+                node = root; // Terminate the loop
+            }
+        }
+    }
+
+    if (node != nullptr)
+    {
+        node->setColor(BLACK);
+    }
+}
+
+
 // Method to remove a node from the RedBlack search tree
 void RedBlackTree::remove(uint32_t val)
 {
@@ -241,7 +327,7 @@ void RedBlackTree::remove(uint32_t val)
         return;
     }
 
-    // 1. If the node has no children, simply delete it
+    // 1. If the node to be deleted has no children, simply remove it and update the parent node.
     if (current->getLeft() == nullptr && current->getRight() == nullptr)
     {
         if (current == root) {
@@ -255,7 +341,7 @@ void RedBlackTree::remove(uint32_t val)
         }
         delete current;
     }
-    // 2. If the node has one child, replace it with that child
+    // 2. If the node to be deleted has only one child, replace the node with its child.
     else if (current->getLeft() == nullptr || current->getRight() == nullptr)
     {
         Node* child;
@@ -274,20 +360,32 @@ void RedBlackTree::remove(uint32_t val)
         else {
             parent->setRight(child);
         }
-    }
+        child->setParent(parent); // Update the child's parent
 
-    // 3. If the node has two children, find its in-order successor and replace it with that
+        if (child != nullptr && child->getColor() == BLACK)
+        {
+            // Rebalance the tree
+            rebalanceAfterRemoval(child, parent);
+        }
+    }
+    // 3. If the node to be deleted has two children, then replace
+    //    the node with its in-order successor, which is the
+    //    leftmost node in the right subtree. Then delete the in-order
+    //    successor node as if it has at most one child.
     else
     {
-        Node* successor = current->getRight();
-        while (successor->getLeft() != nullptr) {
-            successor = successor->getLeft();
+        Node* successor = current->getLeft();
+
+        while (successor->getRight() != nullptr) {
+            successor = successor->getRight();
         }
+
         uint32_t temp = successor->getData();
         remove(temp);
         current->setData(temp);
     }
 }
+
 
 // Public method for searching for a value
 bool RedBlackTree::search(uint32_t data)

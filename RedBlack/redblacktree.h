@@ -32,6 +32,8 @@ private:
     void rotateLeft(Node* node);
     void rotateRight(Node* node);
 
+    void rebalanceAfterRemoval(Node* node, Node* parent);
+
     // Method to search for a node in the binary search tree
     bool searchNode(Node* node, uint32_t data);
 
